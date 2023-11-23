@@ -26,18 +26,18 @@ class PokemonSpiderSpider(scrapy.Spider):
         
         yield {
             
-            'pokemon_name' : pok.css("h1.product_title::text").get(),
-            'pokemon_price' : pok.css("p.price .woocommerce-Price-amount::text").get(),
-            'pokemon_description' : pok.css("div.woocommerce-product-details__short-description p::text").get(),
-            'pokemon_stock' : pok.css("p.stock::text").get(),
-            'pokemon_sku' : pok.css("span.sku::text").get(),
-            'pokemon_categories' : pok.css("span.posted_in a::text").getall(),
-            'pokemon_tags' : pok.css("span.tagged_as a::text").getall(),
-            'pokemon_weight' : pok.css(".product_weight::text").get(),
-            # 'pokemon_dimensions' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)"),
-            'pokemon_length' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[0],
-            'pokemon_width' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[1],
-            'pokemon_height' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[2],
+            'name' : pok.css("h1.product_title::text").get(),
+            'price' : pok.css("p.price .woocommerce-Price-amount::text").get(),
+            'description' : pok.css("div.woocommerce-product-details__short-description p::text").get(),
+            'stock' : pok.xpath("//p[@class='stock']/text()").re(r"(\d+)"),
+            'sku' : pok.css("span.sku::text").get(),
+            'categories' : pok.css("span.posted_in a::text").getall(),
+            'tags' : pok.css("span.tagged_as a::text").getall(),
+            'weight' : pok.xpath("//td[@class='product_weight']/text()").re(r"(\d+)"),
+            # 'dimensions' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)"),
+            'length' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[0],
+            'width' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[1],
+            'height' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[2],
         
         
         }
