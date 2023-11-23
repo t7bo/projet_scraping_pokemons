@@ -1,4 +1,5 @@
 import scrapy
+import re
 
 
 class PokemonSpiderSpider(scrapy.Spider):
@@ -8,20 +9,20 @@ class PokemonSpiderSpider(scrapy.Spider):
 
     def parse(self, response):
         pokemons_links = response.css("a.woocommerce-LoopProduct-link")
-        
-        
-        pokemon_name = response.css("h1.product_title::text").get()
-        pokemon_price = response.css("p.price .woocommerce-Price-amount::text").get()
+
+
+        pokemon_name = response.css("h1.product_title::text").get(),
+        pokemon_price = response.css("p.price .woocommerce-Price-amount::text").get(),
         pokemon_description = response.css("div.woocommerce-product-details__short-description p::text").get()
-        pokemon_stock = response.css("p.stock::text").get()
-        pokemon_sku = response.css("span.sku::text").get()
-        pokemon_categories = response.css("span.posted_in a::text").getall()
+        pokemon_stock = response.css("p.stock::text").get(),
+        pokemon_sku = response.css("span.sku::text").get(),
+        pokemon_categories = response.css("span.posted_in a::text").getall(),
         pokemon_tags = response.css("span.tagged_as a::text").getall()
         pokemon_weight = response.css(".product_weight::text").get()
-        pokemon_length = 
-        pokemon_width = 
-        pokemon_height = 
-        
+        pokemon_dimensions = response.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")
+        pokemon_length = pokemon_dimensions[0]
+        pokemon_width = pokemon_dimensions[1]
+        pokemon_height = pokemon_dimensions[2]
         
         
         for pokemon in pokemons_links:
