@@ -9,26 +9,10 @@ class PokemonSpiderSpider(scrapy.Spider):
 
     def parse(self, response):
         pokemons_links = response.css("a.woocommerce-LoopProduct-link")
-
-
-        pokemon_name = response.css("h1.product_title::text").get(),
-        pokemon_price = response.css("p.price .woocommerce-Price-amount::text").get(),
-        pokemon_description = response.css("div.woocommerce-product-details__short-description p::text").get()
-        pokemon_stock = response.css("p.stock::text").get(),
-        pokemon_sku = response.css("span.sku::text").get(),
-        pokemon_categories = response.css("span.posted_in a::text").getall(),
-        pokemon_tags = response.css("span.tagged_as a::text").getall()
-        pokemon_weight = response.css(".product_weight::text").get()
-        pokemon_dimensions = response.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")
-        pokemon_length = pokemon_dimensions[0]
-        pokemon_width = pokemon_dimensions[1]
-        pokemon_height = pokemon_dimensions[2]
-        
         
         for pokemon in pokemons_links:
-            relative_url = response.css("a.woocommerce-LoopProduct-link").get()
-            if relative_url is not None:
-                yield response.follow(relative_url, callback=self.parse_pokemon_page)
+            pokemon_url = pokemon.css("a.woocommerce-LoopProduct-link::attr(href)").get()
+            yield response.follow(pokemon_url, callback=self.parse_pokemon_page)
     
 
         next_page = response.css("a.next::attr(href)").get()
@@ -37,5 +21,24 @@ class PokemonSpiderSpider(scrapy.Spider):
     
     
     def parse_pokemon_page(self, response):
-        pass
+        
+        pok = response.css("div.content-area")
+        
+        yield {
+            
+            'pokemon_name' : pok.css("h1.product_title::text").get(),
+            'pokemon_price' : pok.css("p.price .woocommerce-Price-amount::text").get(),
+            'pokemon_description' : pok.css("div.woocommerce-product-details__short-description p::text").get(),
+            'pokemon_stock' : pok.css("p.stock::text").get(),
+            'pokemon_sku' : pok.css("span.sku::text").get(),
+            'pokemon_categories' : pok.css("span.posted_in a::text").getall(),
+            'pokemon_tags' : pok.css("span.tagged_as a::text").getall(),
+            'pokemon_weight' : pok.css(".product_weight::text").get(),
+            # 'pokemon_dimensions' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)"),
+            'pokemon_length' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[0],
+            'pokemon_width' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[1],
+            'pokemon_height' : pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[2],
+        
+        
+        }
          
