@@ -28,3 +28,15 @@ import scrapy
             # we can enable or disable what we want, we can enable/disable our spider_middlewares, downloader_middleware, item_pipeline for example...
             
 
+#Part 4 : Create your first spider and extract data from a webpage
+    # how to create a scrapy spider
+        # go to the spiders folder within terminal
+        # $ scrapy genspider nameyouwanttogivetothespider urlofwebsitewegonnabescraping
+            # ex: scrapy genspider moviespider imdb.com
+            # ex2: scrapy genspider moviesidliketowatch https://www.imdb.com/search/title/?title_type=feature&genres=action
+
+    # using scrapy shell to find our CSS selectors
+        # $ pip3 install ipython
+        # ajout de la ligne "shell = ipython" dans le fichier scrapy.cfg dans [settings] sous default = ...
+        # $ sudo pip3 install scrapy
+        # $ scrapy shell
