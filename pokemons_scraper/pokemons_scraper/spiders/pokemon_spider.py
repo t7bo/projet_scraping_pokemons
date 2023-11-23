@@ -38,4 +38,4 @@ class PokemonSpiderSpider(scrapy.Spider):
         pokemon_item['width'] = pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[1],
         pokemon_item["height"] = pok.xpath("//td[@class='product_dimensions']/text()").re(r"(\d+) x (\d+) x (\d+)")[2],
          
-        yield PokemonItem
+        yield pokemon_item
