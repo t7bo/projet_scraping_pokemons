@@ -29,7 +29,7 @@ class PokemonSpiderSpider(scrapy.Spider):
             'name' : pok.css("h1.product_title::text").get(),
             'price' : pok.css("p.price .woocommerce-Price-amount::text").get(),
             'description' : pok.css("div.woocommerce-product-details__short-description p::text").get(),
-            'stock' : pok.xpath("//p[@class='stock']/text()").re(r"(\d+)"),
+            'stock' : pok.css("p.stock::text").get(), #pok.xpath("//p[@class='stock']/text()").re(r"(\d+) in stock"),
             'sku' : pok.css("span.sku::text").get(),
             'categories' : pok.css("span.posted_in a::text").getall(),
             'tags' : pok.css("span.tagged_as a::text").getall(),
