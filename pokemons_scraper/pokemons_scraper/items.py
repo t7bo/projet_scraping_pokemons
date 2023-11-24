@@ -22,7 +22,7 @@ class PokemonItem(scrapy.Item):
     name = scrapy.Field()
     price = scrapy.Field()
     description = scrapy.Field()
-    stock = scrapy.Field(stock_sans_str = enlever_str)
+    stock = scrapy.Field()
     sku = scrapy.Field()
     categories = scrapy.Field()
     tags = scrapy.Field()
