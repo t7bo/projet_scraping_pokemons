@@ -79,7 +79,7 @@ class PokemonsScraperPipeline:
 
         #create tables if none exists
         self.cur.execute("""
-                         CREATE TABLE IF NOT EXISTS pokemon_data(
+                         CREATE TABLE IF NOT EXISTS pokemons_data(
                          
                          categories TEXT,
                          description TEXT,
@@ -122,7 +122,7 @@ class PokemonsScraperPipeline:
                 adapter[lowercase_key] = value_lower.lower()
             elif isinstance(value_lower, list):
                 # Si la valeur est une liste, mettre en minuscule chaque élément
-                adapter[lowercase_key] = [item.lower() for item in value_lower]
+                adapter[lowercase_key] = ",".join([item.lower() for item in value_lower])
             else:
                 # Gérer d'autres types de données comme vous le souhaitez
                 adapter[lowercase_key] = value_lower
@@ -140,16 +140,16 @@ class PokemonsScraperPipeline:
         adapter['price'] = float(value_prix)
 
 
+        print(type(adapter.get("categories")))
 
 
-
-                # define insert statement
+        # define insert statement
         self.cur.execute("""
-                         INSERT INTO pokemons_data (name, description, price, sku, stock, categories, tags, weight, height, width, length) VALUES (?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?)
+                         INSERT INTO pokemons_data (categories, description, height, length, name, price, sku, stock, tags, weight, width) VALUES (?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?)
                          """,
                          (
 
-                             adapter["categories"],
+                             adapter.get("categories"),
                              adapter["description"],
                              adapter['height'],
                              adapter['length'],
@@ -164,6 +164,12 @@ class PokemonsScraperPipeline:
                          )
                          )
         
+
+        # ma_variable = f'''
+        # INSERT INTO ma_table (texte, int)
+        # VALUES ('{adapter['width']}', {adapter['width']})
+        # '''
+        # print()
         #execute insert of data in database
         self.con.commit()
 
