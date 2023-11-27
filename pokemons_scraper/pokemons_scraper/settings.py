@@ -12,6 +12,9 @@ BOT_NAME = "pokemons_scraper"
 SPIDER_MODULES = ["pokemons_scraper.spiders"]
 NEWSPIDER_MODULE = "pokemons_scraper.spiders"
 
+FEEDS = {
+    'pokemons_data_cleaned.csv' : {'format': 'csv'},
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "pokemons_scraper (+http://www.yourdomain.com)"

@@ -7,6 +7,12 @@ class PokemonSpiderSpider(scrapy.Spider):
     allowed_domains = ["scrapeme.live"]
     start_urls = ["https://scrapeme.live/shop/"]
 
+    custom_settings = {
+        'FEEDS': {
+            'pokemons_data_cleaned.csv' : {'format': 'csv', 'overwrite': True},
+        }
+    }
+
     def parse(self, response):
         pokemons_links = response.css("a.woocommerce-LoopProduct-link")
         

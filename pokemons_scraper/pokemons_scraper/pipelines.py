@@ -5,10 +5,99 @@
 
 
 # useful for handling different item types with a single interface
+import sqlite3
 from itemadapter import ItemAdapter
+
+# class SqlitePipeline:
+#     def __init__(self) -> None:
+#         pass
+
+#         #create/connect to database
+#         self.con = sqlite3.connect('pokemons_database.db')
+
+#         #create cursor, used to execute commands
+#         self.cur = self.con.cursor()
+
+#         #create tables if none exists
+#         self.cur.execute("""
+#         CREATE TABLE IF NOT EXISTS pokemons_data(
+#             name TEXT,
+#             description TEXT,
+#             price FLOAT,
+#             sku INTEGER,
+#             stock INTEGER,
+#             categories TEXT,
+#             tags TEXT,
+#             weight FLOAT,
+#             height INTEGER,
+#             width INTEGER,
+#             length INTEGER
+#             )
+#         """)
+
+
+
+
+#     def process_item(self, item, spider):
+
+#         # define insert statement
+#         self.cur.execute("""
+#                          INSERT INTO pokemons_data (name, description, price, sku, stock, categories, tags, weight, height, width, length) VALUES (?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?)
+#                          """,
+#                          (
+#                             item['name'],
+#                             item["description"],
+#                             item["price"],
+#                             item["sku"],
+#                             item["stock"],
+#                             item["categories"],
+#                             item["tags"],
+#                             item["weight"],
+#                             item["height"],
+#                             item['width'],
+#                             item['length']
+                            
+#                          )
+#                          )
+        
+#         #execute insert of data in database
+#         self.con.commit()
+        
+#         return item
 
 
 class PokemonsScraperPipeline:
+
+
+    def __init__(self):
+
+        #create/connect to database
+        self.con = sqlite3.connect('pokemons_database.db')
+
+        #create cursor, used to execute commands
+        self.cur = self.con.cursor()
+
+        #create tables if none exists
+        self.cur.execute("""
+                         CREATE TABLE IF NOT EXISTS pokemon_data(
+                         
+                         categories TEXT,
+                         description TEXT,
+                         height INTEGER,
+                         length INTEGER,
+                         name TEXT,
+                         price FLOAT,
+                         sku INTEGER,
+                         stock INTEGER,
+                         tags TEXT,
+                         weight FLOAT,
+                         width INTEGER
+                         )
+
+                        """)
+
+
+
     def process_item(self, item, spider):
         
         adapter = ItemAdapter(item)
@@ -51,94 +140,32 @@ class PokemonsScraperPipeline:
         adapter['price'] = float(value_prix)
 
 
-        # int_variables = ['sku', 'length', 'width', 'height']
-        # for int_variable in int_variables:
-        #     int_value = adapter.get(int_variable)
-        #     if isinstance(int_value, str):
-        #         # Convertir la chaîne en entier
-        #         adapter[int_variable] = int(int_value)
-        #     elif isinstance(int_value, list):
-        #         # Si la valeur est une liste, convertir chaque élément en entier
-        #         adapter[int_variable] = [int(item) for item in int_value]
-
-
-        # weight_variable = 'weight'
-        # weight_value = adapter.get(weight_variable)
-        # if isinstance(weight_value, str):
-        #     # Nettoyer la chaîne en remplaçant les virgules par des points
-        #     weight_value = weight_value.replace(",", '.')
-        #     cleaned_value = ''.join(c if c.isdigit() or c == '.' else '' for c in weight_value)
-        #     adapter[weight_variable] = float(cleaned_value)
-        # elif isinstance(weight_value, list):
-        #     cleaned_values = [float(''.join(c if c.isdigit() or c == '.' else '' for c in str(item))) for item in weight_value]
-        #     adapter[weight_variable] = cleaned_values[0]
-        #     # for decimal_value in cleaned_values[1:]:
-        #     #     adapter[weight_variable] += decimal_value / (10 ** len(str(decimal_value)))
-
-    
-        # stock_variable = 'stock'
-        # stock_value = adapter.get(stock_variable)
-        # if isinstance(stock_value, str):
-        #     adapter[stock_variable] = int(str(stock_value).strip("[]"))
-        # elif isinstance(stock_value, list):
-        #     # Convertir la liste en chaîne et retirer les crochets
-        #     adapter[stock_variable] = int(str(stock_value).strip("[]"))
-        #     for decimal_value in cleaned_values[1:]:
-        #         adapter[weight_variable] += decimal_value / (10 ** len(str(decimal_value)))
-
-
-        # float_variables = ['price']
-        # for float_variable in float_variables:
-        #     float_value = adapter.get(float_variable)
-        #     if isinstance(float_value, str):
-        #         adapter[float_variable] = float(float_value.replace(",", '.'))  # Correction ici
-        #     elif isinstance(float_value, list):
-        #         adapter[float_variable] = [float(item.replace(",", '.')) for item in float_value]
-
-
-        # list_variables = ['categories', 'tags']
-        # for list_variable in list_variables:
-        #     list_value = adapter.get(list_variable)
-        #     if isinstance(list_value, str):
-        #         # Convertir la chaîne en entier
-        #         adapter[list_variable] = list_value.lower()
-        #     elif isinstance(list_value, list):
-        #         # Si la valeur est une liste, convertir chaque élément en entier
-        #         adapter[list_variable] = [item.lower() for item in list_value]
-        #     else:
-        #         adapter[list_variable] = list_value.lower()
 
 
 
+                # define insert statement
+        self.cur.execute("""
+                         INSERT INTO pokemons_data (name, description, price, sku, stock, categories, tags, weight, height, width, length) VALUES (?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?)
+                         """,
+                         (
 
-
-
-
-
-
+                             adapter["categories"],
+                             adapter["description"],
+                             adapter['height'],
+                             adapter['length'],
+                             adapter['name'],
+                             adapter["price"],
+                             adapter["sku"],
+                             adapter["stock"],
+                             adapter["tags"],
+                             adapter["weight"],
+                             adapter['width'],
+                            
+                         )
+                         )
         
-        
-        # for field_name in field_names:
-        #     if field_name == 'price':
-        #         value = adapter.get(field_name)
-        #         adapter[field_name] = float(value)
-                
-        #     if field_name == 'sku':
-        #         sku_value = adapter.get("sku")
-        #         adapter[field_name] = int(sku_value)
-                
-        #     if field_name == 'stock':
-        #         stock_string = adapter.get("stock")
-        #         # split_string = stock_string.split('')
-        #         for character in stock_string:
-        #             if character.isdigit() == False:
-        #                 stock_string.remove(character)
-        #         adapter[field_name] = int(stock_string)
-            
-        #     if field_name == 'tags':
-        #         tags_values = adapter.get("tags")
-        #         for tag in tags_values:
-        #             tag = tag.title()
-        #         adapter[field_name] = tag
+        #execute insert of data in database
+        self.con.commit()
+
             
         return item
